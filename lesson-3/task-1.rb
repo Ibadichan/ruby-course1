@@ -19,7 +19,6 @@ class Station
 end
 
 class Route
-  attr_reader :all_stations
   def initialize(start_station,end_station)
     @start_station = start_station
     @end_station = end_station
@@ -63,6 +62,7 @@ class Train
   end
   
   def remove_car
+    return if @cars == 0  # нельзя уменьшить вагоны когда их 0
     @cars -= 1 if @speed ==0
   end
   
@@ -91,21 +91,41 @@ class Train
   end
 end
 
+train = Train.new("Ld-65","passenger",5)
+
 station_moskva = Station.new("moskva")
 station_milan = Station.new("milan")
 station_kiev = Station.new("kiev")
 station_buharest = Station.new("buharest")
 
 route = Route.new(station_moskva,station_milan)
-route.add_station(station_kiev)
-route.add_station(station_buharest)
 
-train1 = Train.new("Ld-65","passenger",5)
 
-train1.set_route(route)
+station_moskva.add_train(train) # станция может принимать поезда
+station_moskva.trains # показать все поезда на станции в текущий момент
+station_moskva.by_type("passenger") #может показывать список поездов на станции по типу, >>
+station_moskva.by_type("passenger").count # и их количеству.
+station_moskva.remove_train(train) # может отправлять поезда 
 
-train1.next_step
+route.add_station(station_kiev) # маршрут может добавлять промежуточные станции
+route.add_station(station_buharest) #добавляет также станцию
+route.remove_station(station_kiev) # может удалять промежуточные станции
+route.all_stations # вывести список всех станций от начала до конечной
 
-puts train1.current_station.inspect
+train.speed = 100 # может набирать скорость
+train.speed # может показывать текущую скорость
+train.stop # может сбрасывать скорость до 0
+train.cars # может показать количество вагонов
+train.add_car # может добавлять вагон
+train.remove_car # может отцеплять вагон
+
+train.set_route(route) # может принимать маршрут
+train.next_step # может перемещаться на станцию вперед
+train.prev_step # может перемещаться на станцию назад
+
+train.current_station # может показывать текущую станцию
+train.prev_station # может показывать предыдущую станцию
+train.next_station # может показать следующую станцию
+
 
  
