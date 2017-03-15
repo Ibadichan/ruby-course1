@@ -5,47 +5,40 @@ class Station
     @name = name
     @trains = []
   end
-  
+
   def add_train(train)
     @trains << train
   end
-  
+
   def by_type(type)
     @trains.select {|train| type == train.type}
   end
-  
+
   def remove_train(train)
     @trains.delete(train)
   end
 end
 
 class Route
+  attr_reader :stations
+
   def initialize(start_station,end_station)
-    @start_station = start_station
-    @end_station = end_station
-    @intermediate_stations = []
+    @stations = [start_station,end_station]
   end
-  
+
   def add_station(station)
-    @intermediate_stations << station
+    @stations.insert(-2,station)
   end
-  
+
   def remove_station(station)
-    @intermediate_stations.delete(station)
-  end
-  
-  def all_stations
-    all_stations = [@start_station]
-    all_stations += @intermediate_stations
-    all_stations << @end_station
-    all_stations
+    @stations.delete(station)
   end
 end
 
 class Train
-  attr_reader :type, :number ,:cars, :route
+  attr_reader :type, :number, :cars
   attr_accessor :speed, :route
-  
+
   def initialize(number,type,cars)
     @number = number
     @type = type
@@ -53,38 +46,50 @@ class Train
     @speed = 0
     @step = 0
   end
-  
+
   def stop
     @speed = 0
   end
-  
+
   def add_car
-    @cars += 1 if @speed == 0
+    @cars += 1 if stopped
   end
-  
+
   def remove_car
-    return if @cars == 0  # нельзя уменьшить вагоны когда их 0
-    @cars -= 1 if @speed ==0
+    return if @cars == 0  && stopped
+    @cars -= 1 if stopped
   end
-  
+
   def next_step
-    @step += 1
+    @step += 1 if can_next
   end
-  
+
   def prev_step
-    @step -= 1
+    @step -= 1 if positive_step
   end
-  
+
   def current_station
-    @route.all_stations[@step]
+    @route.stations[@step]
   end
-  
+
   def prev_station
-    @route.all_stations[@step-1]
+    @route.stations[@step-1] if positive_step
   end
-  
+
   def next_station
-    @route.all_stations[@step+1]
+    @route.stations[@step+1] if can_next
+  end
+
+  def positive_step
+    @step > 0
+  end
+
+  def stopped
+    @speed == 0
+  end
+
+  def can_next
+    @step <= @route.stations.size
   end
 end
 
@@ -102,12 +107,12 @@ station_moskva.add_train(train) # станция может принимать �
 puts station_moskva.trains.inspect # показать все поезда на станции в текущий момент
 puts station_moskva.by_type("passenger").inspect #может показывать список поездов на станции по типу, >>
 puts station_moskva.by_type("passenger").count # и их количеству.
-station_moskva.remove_train(train) # может отправлять поезда 
+station_moskva.remove_train(train) # может отправлять поезда
 
 route.add_station(station_kiev) # маршрут может добавлять промежуточные станции
 route.add_station(station_buharest) #добавляет также станцию
 route.remove_station(station_kiev) # может удалять промежуточные станции
-puts route.all_stations.inspect # вывести список всех станций от начала до конечной
+puts route.stations.inspect # вывести список всех станций от начала до конечной
 
 train.speed = 100 # может набирать скорость
 puts train.speed # может показывать текущую скорость
