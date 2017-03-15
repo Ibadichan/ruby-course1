@@ -43,7 +43,7 @@ end
 
 class Train
   attr_reader :type, :number ,:cars, :route
-  attr_accessor :speed
+  attr_accessor :speed, :route
   
   def initialize(number,type,cars)
     @number = number
@@ -64,10 +64,6 @@ class Train
   def remove_car
     return if @cars == 0  # нельзя уменьшить вагоны когда их 0
     @cars -= 1 if @speed ==0
-  end
-  
-  def set_route(route)
-    @route = route
   end
   
   def next_step
@@ -119,13 +115,10 @@ train.cars # может показать количество вагонов
 train.add_car # может добавлять вагон
 train.remove_car # может отцеплять вагон
 
-train.set_route(route) # может принимать маршрут
+train.route = route # может принимать маршрут
 train.next_step # может перемещаться на станцию вперед
 train.prev_step # может перемещаться на станцию назад
 
 train.current_station # может показывать текущую станцию
 train.prev_station # может показывать предыдущую станцию
 train.next_station # может показать следующую станцию
-
-
- 
