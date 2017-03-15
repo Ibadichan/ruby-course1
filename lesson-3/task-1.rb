@@ -1,5 +1,6 @@
 class Station
   attr_reader :trains
+
   def initialize(name)
     @name = name
     @trains = []
@@ -98,20 +99,20 @@ route = Route.new(station_moskva,station_milan)
 
 
 station_moskva.add_train(train) # станция может принимать поезда
-station_moskva.trains # показать все поезда на станции в текущий момент
-station_moskva.by_type("passenger") #может показывать список поездов на станции по типу, >>
-station_moskva.by_type("passenger").count # и их количеству.
+puts station_moskva.trains.inspect # показать все поезда на станции в текущий момент
+puts station_moskva.by_type("passenger").inspect #может показывать список поездов на станции по типу, >>
+puts station_moskva.by_type("passenger").count # и их количеству.
 station_moskva.remove_train(train) # может отправлять поезда 
 
 route.add_station(station_kiev) # маршрут может добавлять промежуточные станции
 route.add_station(station_buharest) #добавляет также станцию
 route.remove_station(station_kiev) # может удалять промежуточные станции
-route.all_stations # вывести список всех станций от начала до конечной
+puts route.all_stations.inspect # вывести список всех станций от начала до конечной
 
 train.speed = 100 # может набирать скорость
-train.speed # может показывать текущую скорость
-train.stop # может сбрасывать скорость до 0
-train.cars # может показать количество вагонов
+puts train.speed # может показывать текущую скорость
+puts train.stop # может сбрасывать скорость до 0
+puts train.cars # может показать количество вагонов
 train.add_car # может добавлять вагон
 train.remove_car # может отцеплять вагон
 
@@ -119,6 +120,6 @@ train.route = route # может принимать маршрут
 train.next_step # может перемещаться на станцию вперед
 train.prev_step # может перемещаться на станцию назад
 
-train.current_station # может показывать текущую станцию
-train.prev_station # может показывать предыдущую станцию
-train.next_station # может показать следующую станцию
+puts train.current_station # может показывать текущую станцию
+puts train.prev_station # может показывать предыдущую станцию
+puts train.next_station # может показать следующую станцию
