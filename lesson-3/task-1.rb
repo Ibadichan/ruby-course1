@@ -44,7 +44,7 @@ class Train
     @type = type
     @cars = cars
     @speed = 0
-    @step = 0
+    @index = 0
   end
 
   def stop
@@ -60,24 +60,24 @@ class Train
     @cars -= 1 if stopped?
   end
 
-  def next_step
-    @step += 1 if can_next?
+  def forward
+    @index += 1 if can_next?
   end
 
-  def prev_step
-    @step -= 1 if @step > 0
+  def backward
+    @index -= 1 if @index > 0
   end
 
   def current_station
-    @route.stations[@step]
+    @route.stations[@index]
   end
 
   def prev_station
-    @route.stations[@step-1] if @step > 0
+    @route.stations[@index-1] if @index > 0
   end
 
   def next_station
-    @route.stations[@step+1] if can_next?
+    @route.stations[@index+1] if can_next?
   end
 
   def stopped?
@@ -85,7 +85,7 @@ class Train
   end
 
   def can_next?
-    @step <= @route.stations.size
+    @index <= @route.stations.size
   end
 end
 
@@ -118,8 +118,8 @@ train.add_car # может добавлять вагон
 train.remove_car # может отцеплять вагон
 
 train.route = route # может принимать маршрут
-train.next_step # может перемещаться на станцию вперед
-train.prev_step # может перемещаться на станцию назад
+train.forward # может перемещаться на станцию вперед
+train.backward # может перемещаться на станцию назад
 
 puts train.current_station # может показывать текущую станцию
 puts train.prev_station # может показывать предыдущую станцию
