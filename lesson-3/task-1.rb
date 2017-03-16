@@ -10,7 +10,7 @@ class Station
     @trains << train
   end
 
-  def by_type(type)
+  def trains_by_type(type)
     @trains.select {|train| type == train.type}
   end
 
@@ -31,7 +31,7 @@ class Route
   end
 
   def remove_station(station)
-    @stations.delete(station)
+    @stations.delete(station) if station != @stations[0] && station != @stations[-1]
   end
 end
 
@@ -52,20 +52,20 @@ class Train
   end
 
   def add_car
-    @cars += 1 if stopped
+    @cars += 1 if stopped?
   end
 
   def remove_car
-    return if @cars == 0  && stopped
-    @cars -= 1 if stopped
+    return if @cars == 0
+    @cars -= 1 if stopped?
   end
 
   def next_step
-    @step += 1 if can_next
+    @step += 1 if can_next?
   end
 
   def prev_step
-    @step -= 1 if positive_step
+    @step -= 1 if @step > 0
   end
 
   def current_station
@@ -73,22 +73,18 @@ class Train
   end
 
   def prev_station
-    @route.stations[@step-1] if positive_step
+    @route.stations[@step-1] if @step > 0
   end
 
   def next_station
-    @route.stations[@step+1] if can_next
+    @route.stations[@step+1] if can_next?
   end
 
-  def positive_step
-    @step > 0
-  end
-
-  def stopped
+  def stopped?
     @speed == 0
   end
 
-  def can_next
+  def can_next?
     @step <= @route.stations.size
   end
 end
@@ -105,8 +101,8 @@ route = Route.new(station_moskva,station_milan)
 
 station_moskva.add_train(train) # станция может принимать поезда
 puts station_moskva.trains.inspect # показать все поезда на станции в текущий момент
-puts station_moskva.by_type("passenger").inspect #может показывать список поездов на станции по типу, >>
-puts station_moskva.by_type("passenger").count # и их количеству.
+puts station_moskva.trains_by_type("passenger").inspect #может показывать список поездов на станции по типу, >>
+puts station_moskva.trains_by_type("passenger").count # и их количеству.
 station_moskva.remove_train(train) # может отправлять поезда
 
 route.add_station(station_kiev) # маршрут может добавлять промежуточные станции
