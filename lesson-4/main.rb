@@ -1,26 +1,30 @@
 require_relative('station')
 require_relative('route')
 require_relative('train')
-require_relative('cargo_car')
-require_relative('passenger_car')
 require_relative('passenger_train')
 require_relative('cargo_train')
+require_relative('cargo_car')
+require_relative('passenger_car')
+require_relative('storage')
 
-class MyProgramm
-  attr_reader :stations, :trains, :routes
-  attr_writer :route
+class MyProgram
+
+  COMMANDS = %w(
+    create_station create_train create_route
+    edit_route  assign_route
+    add_car remove_car
+    forward backward all_stations trains_of_station stop
+  )
 
   def initialize
-    @stations = []
-    @trains = []
-    @routes = []
+    @storage = Storage.new
   end
 
   def create_station
     puts 'Enter the name of the station'
     name_of_station = gets.chomp
-    station = Station.new(name_of_station)
-    @stations << station
+    @storage.save_station(name_of_station)
+    all_stations
   end
 
   def create_train
@@ -28,121 +32,137 @@ class MyProgramm
     number = gets.chomp
     puts 'Enter the type of the train (Cargo/Passenger)'
     type = gets.chomp
-    train = CargoTrain.new(number) if type == 'Cargo'
-    train = PassengerTrain.new(number) if type == 'Passenger'
-    @trains << train
+    @storage.save_train(number, type)
+    trains
   end
 
   def create_route
-    puts stations.inspect
+    all_stations
     puts 'Write the number of your start station from the list'
-    start_station = @stations[gets.chomp.to_i-1]
+    start_station = @storage.stations[gets.chomp.to_i-1]
     puts 'Do the same as above for the end station'
-    end_station = @stations[gets.chomp.to_i-1]
-    route = Route.new(start_station,end_station)
-    @routes << route
+    end_station = @storage.stations[gets.chomp.to_i-1]
+    @storage.save_route(start_station, end_station)
+    routes
   end
 
   def edit_route
-    puts routes.inspect
+    routes
     puts 'Write the number of your route from the list'
-    route = @routes[gets.chomp.to_i-1]
-    puts stations.inspect
+    route = @storage.routes[gets.chomp.to_i-1]
+    all_stations
     puts 'choose number of the your station'
-    station = @stations[gets.chomp.to_i-1]
+    station = @storage.stations[gets.chomp.to_i-1]
     puts 'choose the action (remove/add)'
     action = gets.chomp
-    route.add_station(station) if action == 'add'
-    route.remove_station(station) if action == 'remove'
+    @storage.update_route(route, station, action)
+    puts route
+
   end
 
   def assign_route
-    puts trains.inspect
+    trains
     puts 'Write the number of your train from the list'
-    train = @trains[gets.chomp.to_i-1]
-    puts routes.inspect
+    train = @storage.trains[gets.chomp.to_i-1]
+    routes
     puts 'Write the number of your route from the list'
-    route = @routes[gets.chomp.to_i-1]
-    train.route = route
+    route = @storage.routes[gets.chomp.to_i-1]
+    @storage.assign_route(train, route)
+    route.stations[0].trains << train
+    current_train(train)
   end
 
   def add_car
-    puts trains.inspect
+    trains
     puts 'Write the number of your train from the list'
-    train = trains[gets.chomp.to_i-1]
-    car = CargoCar.new if train.class == CargoTrain
-    car = PassengerCar.new if train.class == PassengerTrain
-    train.add_car(car)
+    train = @storage.trains[gets.chomp.to_i-1]
+    @storage.save_car(train)
+    current_train(train)
   end
 
   def remove_car
-    puts trains.inspect
+    trains
     puts 'Write the number of your train from the list'
-    train = trains[gets.chomp.to_i-1]
+    train = @storage.trains[gets.chomp.to_i-1]
     puts train.cars
     puts 'choose number of car for remove'
     car = gets.chomp.to_i-1
-    train.cars.delete_at(car)
-    puts trains.inspect
+    @storage.remove_car(train, car)
+    current_train(train)
   end
 
   def forward
-    puts trains.inspect
+    trains
     puts 'Write the number of your train from the list '
-    train = trains[gets.chomp.to_i-1]
+    train = @storage.trains[gets.chomp.to_i-1]
     train.forward
+    @storage.move_train(train)
+    current_train(train)
+
   end
 
   def backward
-    puts trains.inspect
+    trains
     puts 'Write the number of your train from the list'
-    train = trains[gets.chomp.to_i-1]
+    train = @storage.trains[gets.chomp.to_i-1]
     train.backward
+    @storage.move_train(train)
+    current_train(train)
   end
 
   def all_stations
-    puts stations.inspect
+    puts @storage.stations.inspect
   end
 
   def trains_of_station
     all_stations
     puts 'select number of your station'
-    station = stations[gets.chomp-1]
-    puts station.train
+    station = @storage.stations[gets.chomp.to_i-1]
+    puts station.trains
+  end
+
+  def welcome
+    puts 'Hello!'
+    puts '<' * 80
+    puts '>' * 80
+    puts 'Keep calm and choose your method. To exit, write stop and press Enter'
+    puts 'for example: create_train '
+    puts '>' * 80
+  end
+
+  private
+  def current_train(train)
+    puts train.inspect
+  end
+
+  def routes
+    puts @storage.routes.inspect
+  end
+
+  def trains
+    puts @storage.trains.inspect
   end
 end
 
-commands = %w(
-  create_station create_train create_route
-  edit_route  assign_route
-  add_car remove_car
-  forward backward all_stations all_trains stop routes
-)
-programm = MyProgramm.new
+program = MyProgram.new
+program.welcome
 
-puts 'Hello!'
-puts '<' * 80
-puts '>' * 80
-puts 'Keep calm and choose your method. To exit, write stop and press Enter'
-puts 'for example: create_train '
-puts '>' * 80
-commands.each_with_index {|c,i| puts "#{i+1}. #{c}"}
+MyProgram::COMMANDS.each_with_index {|c,i| puts "#{i+1}. #{c}"}
 
 while true
   command = gets.chomp
 
-  until commands.include?(command)
+  until MyProgram::COMMANDS.include?(command)
     puts 'Error!!! Try again'
     command = gets.chomp
   end
 
   break if command == 'stop'
 
-  programm.send(command)
+  program.send(command)
 
   puts '$' * 80
   puts 'choose method (for exit stop)'
   puts '$' * 80
 end
-
 

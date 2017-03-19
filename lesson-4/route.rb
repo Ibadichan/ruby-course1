@@ -10,7 +10,8 @@ class Route
   end
 
   def remove_station(station)
-    return if @stations.include?(station) == false
+    return unless @stations.include?(station)
     @stations.delete(station) if station != @stations[0] && station != @stations[-1]
   end
 end
+

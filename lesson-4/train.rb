@@ -1,5 +1,5 @@
 class Train
-  attr_reader :number, :cars
+  attr_reader :number, :cars, :index
   attr_accessor :speed, :route
 
   def initialize(number)
@@ -40,6 +40,11 @@ class Train
   def can_next?
     @index <= @route.stations.size
   end
+
+  def add_car(car)
+    @cars << car if valid_car_type?(car) &&  stopped?
+  end
 end
+
 
 
