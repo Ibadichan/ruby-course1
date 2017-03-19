@@ -13,11 +13,6 @@ class Train
     @speed = 0
   end
 
-  def remove_car
-    return if @cars == 0
-    @cars -= 1 if stopped?
-  end
-
   def forward
     @index += 1 if can_next?
   end
