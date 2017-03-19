@@ -38,7 +38,7 @@ class MyProgramm
     puts 'Write the number of your start station from the list'
     start_station = @stations[gets.chomp.to_i-1]
     puts 'Do the same as above for the end station'
-    end_station = @stations[gets.chomp.to_i]
+    end_station = @stations[gets.chomp.to_i-1]
     route = Route.new(start_station,end_station)
     @routes << route
   end
@@ -107,7 +107,7 @@ class MyProgramm
   def trains_of_station
     all_stations
     puts 'select number of your station'
-    station = all_stations[gets.chomp-1]
+    station = stations[gets.chomp-1]
     puts station.train
   end
 end
@@ -144,4 +144,5 @@ while true
   puts 'choose method (for exit stop)'
   puts '$' * 80
 end
+
 
