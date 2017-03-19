@@ -40,6 +40,11 @@ class Train
   def can_next?
     @index <= @route.stations.size
   end
+
+  def add_car(car)
+    @cars << car if valid_car_type?(car) &&  stopped?
+  end
 end
+
 
 

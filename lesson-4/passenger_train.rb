@@ -1,6 +1,10 @@
 class PassengerTrain < Train
   TYPE = 'passenger'
-  def add_car(car)
-    @cars << car if car.class == PassengerCar &&  stopped?
+
+  private
+
+  def valid_car_type?(car)
+    car.class == PassengerCar
   end
 end
+
