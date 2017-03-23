@@ -6,18 +6,18 @@ class Train
   attr_reader :number, :cars, :index
   attr_accessor :speed, :route
 
-  @@trains = []
-
-  def self.find(number)
-    @@trains.select {|train| number == train.number}
-  end
+  @@trains = {}
 
   def initialize(number)
     @number = number
     @speed = 0
     @cars = []
     @index = 0
-    @@trains << self
+    @@trains[@number] = self
+  end
+
+  def self.find(number)
+    @@trains[number]
   end
 
   def stop
@@ -56,4 +56,5 @@ class Train
     @cars << car if valid_car_type?(car) &&  stopped?
   end
 end
+
 
