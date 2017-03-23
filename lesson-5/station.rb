@@ -3,14 +3,14 @@ class Station
 
   @@stations = []
 
-  def self.all
-    @@stations
-  end
-
   def initialize(name)
     @name = name
     @trains = []
     @@stations << self
+  end
+
+  def self.all
+    @@stations
   end
 
   def add_train(train)
@@ -25,3 +25,4 @@ class Station
     @trains.delete(train)
   end
 end
+
