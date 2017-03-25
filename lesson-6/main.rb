@@ -30,11 +30,9 @@ class MyProgram
   def create_train
     puts 'Enter the number of the train'
     number = gets.chomp
-    @storage.number=number
-    @storage.validate!
     puts 'Enter the type of the train (Cargo/Passenger)'
     type = gets.chomp
-    @storage.save_train(@storage.number, type)
+    @storage.save_train(number, type)
     trains
   end
 
@@ -133,7 +131,6 @@ class MyProgram
   end
 
   private
-
   def current_train(train)
     puts train.inspect
   end
