@@ -1,9 +1,6 @@
 class Storage
   attr_reader :stations, :trains, :routes
   attr_writer :route
-  attr_accessor :number
-
-  FORMAT_NUMBER = /^([a-z]|\d){3}-?([a-z]|\d){2}$/i
 
   def initialize
     @stations = []
@@ -19,7 +16,7 @@ class Storage
   def save_train(number, type)
     train = CargoTrain.new(number) if type == 'Cargo'
     train = PassengerTrain.new(number) if type == 'Passenger'
-    @trains << train
+    @trains << train if train.valid?
   end
 
   def save_route(start_station, end_station)
@@ -49,21 +46,5 @@ class Storage
   def move_train(train)
     train.route.stations[train.index-1].trains.delete(train)
     train.route.stations[train.index].trains << train
-  end
-
-  def valid?
-    validate!
-  rescue
-    false
-  end
-
-  def validate!
-    raise if  self.number !~ FORMAT_NUMBER
-  rescue RuntimeError
-    puts 'invalid number, enter new number :'
-    number = gets.chomp
-    self.number = number
-    retry
-  ensure puts 'valid number (: !!! '
   end
 end
