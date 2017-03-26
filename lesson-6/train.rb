@@ -7,10 +7,11 @@ class Train
   attr_accessor :speed, :route
 
   @@trains = {}
-  FORMAT_NUMBER = /^([a-z]|\d){3}-?([a-z]|\d){2}$/i
+  FORMAT_NUMBER = /^[a-z\d]{3}-?[a-z\d]{2}$/i
 
   def initialize(number)
     @number = number
+    validate!
     @speed = 0
     @cars = []
     @index = 0
@@ -64,13 +65,10 @@ class Train
     false
   end
 
+  private
+
   def validate!
     raise 'number invalid ' if @number !~ FORMAT_NUMBER
     true
   end
 end
-
-
-tr = Train.new('ji90')
-
-puts tr.valid?

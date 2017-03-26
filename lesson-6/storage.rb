@@ -11,17 +11,27 @@ class Storage
   def save_station(name_of_station)
     station = Station.new(name_of_station)
     @stations << station
+  rescue => e
+    puts e.message
+    puts 'try again!!!'
   end
 
   def save_train(number, type)
     train = CargoTrain.new(number) if type == 'Cargo'
     train = PassengerTrain.new(number) if type == 'Passenger'
-    @trains << train if train.valid?
+    @trains << train
+  rescue => e
+    puts e.message
+    puts 'try again'
+
   end
 
   def save_route(start_station, end_station)
     route = Route.new(start_station, end_station)
     @routes << route
+  rescue => e
+    puts e.message
+    puts 'try again!!!'
   end
 
   def update_route(route,station, action)
