@@ -1,5 +1,4 @@
 class PassengerTrain < Train
-  TYPE = 'passenger'
 
   private
 

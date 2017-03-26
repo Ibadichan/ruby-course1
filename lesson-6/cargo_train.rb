@@ -1,5 +1,4 @@
 class CargoTrain < Train
-  TYPE = 'cargo'
 
   private
 

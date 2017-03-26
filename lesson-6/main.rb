@@ -165,4 +165,3 @@ while true
   puts 'choose method (for exit stop)'
   puts '$' * 80
 end
-
