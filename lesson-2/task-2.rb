@@ -1,5 +1,4 @@
+
 arr = []
-(10..100).each do  |number|
-  arr << number if number % 5 == 0
-end
+(10..100).each { |number| arr << number if (number % 5).zero? }
 puts arr
