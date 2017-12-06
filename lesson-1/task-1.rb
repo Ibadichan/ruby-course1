@@ -1,10 +1,13 @@
-puts "enter your name"
+
+puts 'Enter your name'
 name = gets.chomp
-puts "enter your height"
+puts 'Enter your height'
 height = gets.chomp.to_f
+
 weight = height - 110
+
 if weight > 0
-  puts "Your weight is #{weight}"
+  puts "Weight of #{name} is #{weight}"
 else
-  puts "Your weight is optimal"
+  puts "Weight of #{name} is optimal"
 end

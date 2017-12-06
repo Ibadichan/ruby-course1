@@ -1,16 +1,19 @@
-puts "enter your a"
+
+puts 'Enter your a variable'
 a = gets.chomp.to_f
-puts "enter your b"
+puts 'Enter your b variable'
 b = gets.chomp.to_f
-puts "enter your c"
+puts 'Enter your c variable'
 c = gets.chomp.to_f
-d = b**2 - (4 * a * c)
-dis = "Discriminant : #{d}"
-if d > 0
-  sqrt = Math.sqrt(d)
-  puts "#{dis} , x1 :#{( -b + sqrt ) / (2 * a)} , x2 :#{( -b - sqrt) / (2 * a)}."
-elsif d == 0
-  puts "#{dis}, x :#{(-b)/(2*a)} ."
-else 
-  puts "#{dis} , Корней нет!!!"
+
+discriminant_number = b**2 - (4 * a * c)
+discriminant_text = "Discriminant : #{discriminant_number}"
+
+if discriminant_number > 0
+  sqrt = Math.sqrt(discriminant_number)
+  puts "#{discriminant_text}, x1 :#{(-b + sqrt) / (2 * a)}, x2 :#{(-b - sqrt) / (2 * a)}."
+elsif discriminant_number.zero?
+  puts "#{discriminant_text}, x :#{(-b) / (2 * a)}."
+else
+  puts "#{discriminant_text}, Корней нет!!!"
 end
