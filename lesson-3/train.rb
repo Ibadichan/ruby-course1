@@ -19,8 +19,7 @@ class Train
   end
 
   def remove_car
-    return if @cars.zero?
-    @cars -= 1 if stopped?
+    @cars -= 1 if stopped? && @cars.zero?
   end
 
   def forward

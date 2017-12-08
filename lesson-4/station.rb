@@ -11,7 +11,7 @@ class Station
   end
 
   def trains_by_type(type)
-    @trains.select {|train| type == train.class::TYPE}
+    @trains.select { |train| type == train.class::TYPE }
   end
 
   def remove_train(train)

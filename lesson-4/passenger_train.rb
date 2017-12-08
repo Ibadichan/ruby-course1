@@ -1,5 +1,5 @@
 class PassengerTrain < Train
-  TYPE = 'passenger'
+  TYPE = 'passenger'.freeze
 
   private
 
@@ -7,4 +7,3 @@ class PassengerTrain < Train
     car.class == PassengerCar
   end
 end
-

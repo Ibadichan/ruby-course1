@@ -1,3 +1,2 @@
 class PassengerCar
-
 end
