@@ -1,6 +1,4 @@
-require_relative('car')
+require_relative 'car'
 
 class CargoCar < Car
-
 end
-

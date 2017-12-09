@@ -24,27 +24,28 @@ class Storage
     @routes << route
   end
 
-  def update_route(route,station, action)
+  def update_route(route, station, action)
     route.add_station(station) if action == 'add'
     route.remove_station(station) if action == 'remove'
   end
 
-  def assign_route(train,route)
+  def assign_route(train, route)
     train.route = route
+    route.stations[0].trains << train
   end
 
-  def  save_car(train)
+  def save_car(train)
     car = CargoCar.new if train.class == CargoTrain
     car = PassengerCar.new if train.class == PassengerTrain
     train.add_car(car)
   end
 
-  def remove_car(train,car)
+  def remove_car(train, car)
     train.cars.delete_at(car)
   end
 
   def move_train(train)
-    train.route.stations[train.index-1].trains.delete(train)
+    train.route.stations[train.index - 1].trains.delete(train)
     train.route.stations[train.index].trains << train
   end
 end

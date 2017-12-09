@@ -1,5 +1,5 @@
 class CargoTrain < Train
-  TYPE = 'cargo'
+  TYPE = 'cargo'.freeze
 
   private
 

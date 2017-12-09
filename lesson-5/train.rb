@@ -1,4 +1,4 @@
-require_relative('manufacturer')
+require_relative 'manufacturer'
 
 class Train
   include Manufacturer
@@ -6,18 +6,22 @@ class Train
   attr_reader :number, :cars, :index
   attr_accessor :speed, :route
 
-  @@trains = {}
+  @trains = {}
+
+  def self.find(number)
+    @trains[number]
+  end
+
+  def self.add(train, number)
+    @trains[number] = train
+  end
 
   def initialize(number)
     @number = number
     @speed = 0
     @cars = []
     @index = 0
-    @@trains[@number] = self
-  end
-
-  def self.find(number)
-    @@trains[number]
+    self.class.send :add, self, @number
   end
 
   def stop
@@ -33,28 +37,30 @@ class Train
   end
 
   def current_station
-    @route.stations[@index]
+    route.stations[@index]
   end
 
   def prev_station
-    @route.stations[@index-1] if @index > 0
+    route.stations[@index - 1] if @index > 0
   end
 
   def next_station
-    @route.stations[@index+1] if can_next?
-  end
-
-  def stopped?
-    @speed == 0
-  end
-
-  def can_next?
-    @index <= @route.stations.size
+    route.stations[@index + 1] if can_next?
   end
 
   def add_car(car)
-    @cars << car if valid_car_type?(car) &&  stopped?
+    @cars << car if valid_car_type?(car) && stopped?
   end
+
+  private
+
+  def stopped?
+    @speed.zero?
+  end
+
+  def can_next?
+    @index <= route.stations.size
+  end
+
+  private_class_method :add
 end
-
-

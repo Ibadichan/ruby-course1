@@ -1,5 +1,4 @@
-require_relative('car')
+require_relative 'car'
 
 class PassengerCar < Car
-
 end
