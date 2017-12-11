@@ -1,5 +1,4 @@
 class PassengerTrain < Train
-
   private
 
   def valid_car_type?(car)

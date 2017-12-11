@@ -1,4 +1,4 @@
-require_relative('car')
+require_relative 'car'
 
 class CargoCar < Car
   attr_reader :filled_amount

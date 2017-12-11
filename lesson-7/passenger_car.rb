@@ -1,4 +1,4 @@
-require_relative('car')
+require_relative 'car'
 
 class PassengerCar < Car
   attr_reader :taken_places
@@ -16,4 +16,3 @@ class PassengerCar < Car
     @all_places - @taken_places
   end
 end
-
