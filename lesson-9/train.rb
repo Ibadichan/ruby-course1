@@ -1,9 +1,8 @@
-require_relative('manufacturer')
-require_relative('validation')
+require_relative 'manufacturer'
+require_relative 'validation'
 
 class Train
   include Manufacturer
-
   include Validation
 
   validate :number, :format, /^[a-z\d]{3}-?[a-z\d]{2}$/i
@@ -11,7 +10,15 @@ class Train
   attr_reader :number, :cars, :index
   attr_accessor :speed, :route
 
-  @@trains = {}
+  @trains = {}
+
+  def self.find(number)
+    @trains[number]
+  end
+
+  def self.add(train, number)
+    @trains[number] = train
+  end
 
   def initialize(number)
     @number = number
@@ -19,11 +26,7 @@ class Train
     @speed = 0
     @cars = []
     @index = 0
-    @@trains[@number] = self
-  end
-
-  def self.find(number)
-    @@trains[number]
+    self.class.send :add, self, @number
   end
 
   def stop
@@ -39,23 +42,15 @@ class Train
   end
 
   def current_station
-    @route.stations[@index]
+    route.stations[@index]
   end
 
   def prev_station
-    @route.stations[@index - 1] if @index > 0
+    route.stations[@index - 1] if @index > 0
   end
 
   def next_station
-    @route.stations[@index + 1] if can_next?
-  end
-
-  def stopped?
-    @speed.zero?
-  end
-
-  def can_next?
-    @index <= @route.stations.size
+    route.stations[@index + 1] if can_next?
   end
 
   def add_car(car)
@@ -63,8 +58,18 @@ class Train
   end
 
   def each_car
-    @cars.each do |car|
-      yield(car)
-    end
+    @cars.each { |car| yield(car) }
   end
+
+  private
+
+  def stopped?
+    @speed.zero?
+  end
+
+  def can_next?
+    @index <= route.stations.size
+  end
+
+  private_class_method :add
 end

@@ -34,15 +34,15 @@ module Validation
     private
 
     def presence(attr, _parameter)
-      raise 'your attribute is nil or empty !!!' if attr.nil? || attr.empty?
+      raise "Your attribute #{attr} is nil or empty !!!" if attr.empty?
     end
 
     def format(attr, parameter)
-      raise 'Your attribute doesn\'t match the format!!!' if attr !~ parameter
+      raise "Your attribute #{attr} does not match the format!!!" if attr !~ parameter
     end
 
     def type(attr, parameter)
-      raise "Your attribute class not is #{parameter}" unless attr.is_a?(parameter)
+      raise "Your attribute class is not #{parameter}" unless attr.is_a?(parameter)
     end
   end
 end

@@ -1,5 +1,5 @@
-require_relative('validation')
-require_relative('train')
+require_relative 'validation'
+require_relative 'train'
 
 class CargoTrain < Train
   private

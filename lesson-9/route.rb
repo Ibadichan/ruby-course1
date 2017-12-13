@@ -1,8 +1,7 @@
-require_relative('validation')
+require_relative 'validation'
 
 class Route
   include Validation
-
   attr_reader :stations
 
   validate :stations, :type, Station
@@ -17,7 +16,7 @@ class Route
   end
 
   def remove_station(station)
-    return unless @stations.include?(station)
-    @stations.delete(station) if station != @stations[0] && station != @stations[-1]
+    return unless stations.include?(station)
+    stations.delete(station) if station != stations.first && station != stations.last
   end
 end
